@@ -179,7 +179,6 @@
         .special-mix-box li i {
             color: var(--accent-color);
         }
-        /* Cart Floating Bar */
         .cart-float {
             position: fixed;
             bottom: 20px;
@@ -250,7 +249,7 @@
             align-items: center;
             gap: 10px;
         }
-        .close-cart, .close-admin {
+        .close-cart {
             background: #e76f51;
             color: white;
             border: none;
@@ -268,11 +267,6 @@
             margin-bottom: 3rem;
             box-shadow: 0 4px 15px rgba(0,0,0,0.05);
         }
-        .info-section p {
-            font-size: 1.1rem;
-            margin-bottom: 0.5rem;
-        }
-        /* Admin Dashboard Styles */
         .admin-form-group {
             margin-bottom: 1rem;
         }
@@ -282,7 +276,7 @@
             font-weight: bold;
             color: var(--dark-color);
         }
-        .admin-form-group input, .admin-form-group select {
+        .admin-form-group input {
             width: 100%;
             padding: 0.6rem;
             border: 1px solid #ccc;
@@ -298,20 +292,17 @@
             cursor: pointer;
             font-size: 1rem;
             font-weight: bold;
-            transition: background 0.2s;
         }
         .admin-btn:hover {
             background: var(--accent-color);
         }
-        .admin-product-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: #f9f9f9;
-            padding: 0.8rem;
-            border-radius: 6px;
-            margin-bottom: 0.5rem;
-            border: 1px solid #eee;
+        #loadingOverlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(255,255,255,0.8);
+            display: flex; justify-content: center; align-items: center;
+            font-size: 1.2rem; font-weight: bold; color: var(--dark-color);
+            z-index: 3000;
         }
         footer {
             background: var(--dark-color);
@@ -320,12 +311,11 @@
             padding: 2rem 1rem;
             margin-top: 3rem;
         }
-        footer p {
-            margin: 0.3rem 0;
-        }
     </style>
 </head>
 <body>
+
+    <div id="loadingOverlay">جاري تحميل البيانات من Google Sheets... 🍯</div>
 
     <header>
         <button class="admin-login-btn" onclick="openAdminModal()"><i class="fa-solid fa-lock"></i> لوحة التحكم</button>
@@ -338,11 +328,8 @@
 
     <div class="container">
         <h2 class="section-title">قائمة المنتجات والأسعار</h2>
-        <div class="products-grid" id="products-container">
-            <!-- سيتم تعبئة المنتجات ديناميكياً عبر الجافاسكريبت -->
-        </div>
+        <div class="products-grid" id="products-container"></div>
 
-        <!-- الخلطات العلاجية -->
         <div class="special-mix-box">
             <h3 style="color: var(--dark-color); margin-bottom: 0.5rem;"><i class="fa-solid fa-mortar-pestle"></i> خلطات علاجية خاصة حسب الحاجة:</h3>
             <p style="color: #666; font-size: 0.95rem;">يمكننا تحضير الخلطات خصيصاً للحالات الآتية:</p>
@@ -356,7 +343,6 @@
             </ul>
         </div>
 
-        <!-- ضمان الثقة -->
         <div class="info-section">
             <h3 style="color: var(--accent-color); margin-bottom: 0.8rem;"><i class="fa-solid fa-handshake"></i> وللثقة التامة:</h3>
             <p style="font-size: 1.2rem; font-weight: bold; color: var(--dark-color);">يمكنك التذوق بنفسك قبل الشراء 🍯</p>
@@ -364,13 +350,11 @@
         </div>
     </div>
 
-    <!-- سلة المشتريات العائمة -->
     <div class="cart-float" onclick="toggleCart()">
         <i class="fa-solid fa-cart-shopping"></i>
         <span>سلة الطلبات (<span id="cart-count">0</span>)</span>
     </div>
 
-    <!-- نافذة السلة -->
     <div class="cart-modal" id="cartModal">
         <div class="cart-content">
             <h2 style="color: var(--dark-color); margin-bottom: 1rem;"><i class="fa-solid fa-basket-shopping"></i> سلة طلبات العسل</h2>
@@ -383,10 +367,8 @@
         </div>
     </div>
 
-    <!-- نافذة لوحة التحكم (Admin Panel) -->
     <div class="admin-modal" id="adminModal">
-        <div class="admin-content" id="adminModalContent">
-            <!-- مرحلة تسجيل الدخول -->
+        <div class="admin-content">
             <div id="adminLoginSection">
                 <h2 style="color: var(--dark-color); margin-bottom: 1rem;"><i class="fa-solid fa-lock"></i> تسجيل دخول المسؤول</h2>
                 <div class="admin-form-group">
@@ -397,9 +379,8 @@
                 <button class="close-cart" onclick="closeAdminModal()">إلغاء</button>
             </div>
 
-            <!-- مرحلة لوحة التحكم بعد الدخول -->
             <div id="adminDashboardSection" style="display: none;">
-                <h2 style="color: var(--dark-color); margin-bottom: 1rem;"><i class="fa-solid fa-gears"></i> لوحة تحكم المنتجات والأسعار</h2>
+                <h2 style="color: var(--dark-color); margin-bottom: 1rem;"><i class="fa-solid fa-gears"></i> لوحة تحكم المنتجات (Google Sheets)</h2>
                 
                 <hr style="margin: 1rem 0; border: 0; border-top: 1px solid #ddd;">
                 
@@ -421,9 +402,7 @@
                 <hr style="margin: 1.5rem 0; border: 0; border-top: 1px solid #ddd;">
 
                 <h3 style="color: var(--accent-color); margin-bottom: 0.5rem;">إدارة المنتجات والأسعار الحالية</h3>
-                <div id="adminProductsList" style="max-height: 250px; overflow-y: auto; margin-bottom: 1.5rem;">
-                    <!-- يتم تعبئتها ديناميكياً -->
-                </div>
+                <div id="adminProductsList" style="max-height: 250px; overflow-y: auto; margin-bottom: 1.5rem;"></div>
 
                 <hr style="margin: 1.5rem 0; border: 0; border-top: 1px solid #ddd;">
 
@@ -432,7 +411,7 @@
                     <label>كلمة المرور الجديدة:</label>
                     <input type="password" id="newAdminPass" placeholder="أدخل كلمة المرور الجديدة">
                 </div>
-                <button class="admin-btn" onclick="changeAdminPassword()">حفظ كلمة المرور الجديدة</button>
+                <button class="admin-btn" onclick="changeAdminPassword()">حفظ كلمة المرور في Google Sheets</button>
 
                 <button class="close-cart" onclick="closeAdminModal()" style="margin-top: 2rem;">إغلاق لوحة التحكم</button>
             </div>
@@ -446,84 +425,67 @@
     </footer>
 
     <script>
-        // المنتجات الافتراضية
+        // تم ربط الكود بالرابط الخاص بك بنجاح
+        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzrhNx9PwFQcbr69PwYQWxMr8uQtBna2zviMtvlruK8EXRqdZKyXC05B5KRcqDk1TAo/exec";
+
         let defaultProducts = [
-            {
-                id: 1,
-                title: "عسل البرسيم",
-                icon: "fa-solid fa-jar",
-                prices: [
-                    { size: "1 كيلو", price: 200 },
-                    { size: "نصف كيلو", price: 110 },
-                    { size: "شمع البرسيم (1 كيلو)", price: "طلب خاص" },
-                    { size: "شمع البرسيم (نصف كيلو)", price: "طلب خاص" }
-                ]
-            },
-            {
-                id: 2,
-                title: "عسل الموالح (جودة ممتازة)",
-                icon: "fa-solid fa-lemon",
-                prices: [
-                    { size: "1 كيلو", price: 225 },
-                    { size: "شمع الموالح (1 كيلو / نصف كيلو)", price: "متاح حسب الطلب" }
-                ]
-            },
-            {
-                id: 3,
-                title: "عسل حبة البركة",
-                icon: "fa-solid fa-seedling",
-                prices: [
-                    { size: "1 كيلو", price: 300 }
-                ]
-            },
-            {
-                id: 4,
-                title: "عسل السدر (جودة ممتازة جداً)",
-                icon: "fa-solid fa-crown",
-                prices: [
-                    { size: "1 كيلو", price: 750 }
-                ]
-            },
-            {
-                id: 5,
-                title: "عسل بالمكسرات",
-                icon: "fa-solid fa-bowl-food",
-                prices: [
-                    { size: "نصف كيلو", price: 200 }
-                ]
-            },
-            {
-                id: 6,
-                title: "عسل خلطة للمتزوجين",
-                icon: "fa-solid fa-fire",
-                prices: [
-                    { size: "ربع كيلو مستورد ومجرب", price: 450 },
-                    { size: "علبة باكوات (12 باكو)", price: 400 }
-                ]
-            },
-            {
-                id: 7,
-                title: "زيت الزيتون والمقويات",
-                icon: "fa-solid fa-oil-can",
-                prices: [
-                    { size: "زيت زيتون (لتر)", price: 650 },
-                    { size: "زيت زيتون (نصف لتر)", price: 330 },
-                    { size: "غذاء ملكات النحل / حبوب لقاح / جينسينج / عكبر / طلع", price: "متوفر" }
-                ]
-            }
+            { id: 1, title: "عسل البرسيم", icon: "fa-solid fa-jar", prices: [{ size: "1 كيلو", price: 200 }, { size: "نصف كيلو", price: 110 }] },
+            { id: 2, title: "عسل الموالح (جودة ممتازة)", icon: "fa-solid fa-lemon", prices: [{ size: "1 كيلو", price: 225 }] },
+            { id: 3, title: "عسل حبة البركة", icon: "fa-solid fa-seedling", prices: [{ size: "1 كيلو", price: 300 }] },
+            { id: 4, title: "عسل السدر (جودة ممتازة جداً)", icon: "fa-solid fa-crown", prices: [{ size: "1 كيلو", price: 750 }] }
         ];
 
-        // تحميل المنتجات وكلمة المرور من التخزين المحلي أو استخدام الافتراضية
-        let products = JSON.parse(localStorage.getItem('alawadly_products')) || defaultProducts;
-        let adminPassword = localStorage.getItem('alawadly_admin_pass') || "12345"; // كلمة المرور الافتراضية 12345 ويمكنك تغييرها
-
+        let products = [];
+        let adminPassword = "12345";
         let cart = [];
 
-        // عرض المنتجات في الصفحة الرئيسية
+        async function fetchDatabase() {
+            document.getElementById('loadingOverlay').style.display = 'flex';
+            try {
+                let res = await fetch(GOOGLE_SCRIPT_URL);
+                let data = await res.json();
+                
+                if (data.adminPassword) {
+                    adminPassword = data.adminPassword;
+                }
+                if (data.productsData) {
+                    products = JSON.parse(data.productsData);
+                } else {
+                    products = defaultProducts;
+                    await saveToDatabase('productsData', JSON.stringify(products));
+                }
+            } catch (err) {
+                console.error("خطأ في جلب البيانات:", err);
+                products = defaultProducts;
+            } finally {
+                document.getElementById('loadingOverlay').style.display = 'none';
+                renderProducts();
+            }
+        }
+
+        async function saveToDatabase(key, value) {
+            document.getElementById('loadingOverlay').style.display = 'flex';
+            document.getElementById('loadingOverlay').innerText = "جاري حفظ التغييرات في Google Sheets...";
+            try {
+                let payload = {};
+                payload[key] = value;
+                await fetch(GOOGLE_SCRIPT_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+            } catch (err) {
+                alert("حدث خطأ أثناء الحفظ!");
+            } finally {
+                document.getElementById('loadingOverlay').style.display = 'none';
+                document.getElementById('loadingOverlay').innerText = "جاري تحميل البيانات من Google Sheets... 🍯";
+            }
+        }
+
         function renderProducts() {
             let container = document.getElementById('products-container');
             let html = '';
-
             products.forEach(prod => {
                 html += `
                     <div class="product-card">
@@ -531,31 +493,23 @@
                             <h3 class="product-title"><i class="${prod.icon || 'fa-solid fa-jar'}"></i> ${prod.title}</h3>
                             <div class="price-options">
                 `;
-                
                 prod.prices.forEach(p => {
                     let isNumeric = typeof p.price === 'number';
-                    let priceTagHTML = isNumeric ? `<span class="price-tag">${p.price} ج</span>` : `<span class="price-tag">${p.price}</span>`;
-                    let addBtnHTML = isNumeric ? `<button class="add-btn" onclick="addToCart('${prod.title} (${p.size})', ${p.price})">إضافة</button>` : '';
-                    
                     html += `
                         <div class="price-row">
                             <span>${p.size}</span>
-                            <div>${priceTagHTML} ${addBtnHTML}</div>
+                            <div>
+                                <span class="price-tag">${p.price} ${isNumeric ? 'ج' : ''}</span> 
+                                ${isNumeric ? `<button class="add-btn" onclick="addToCart('${prod.title} (${p.size})', ${p.price})">إضافة</button>` : ''}
+                            </div>
                         </div>
                     `;
                 });
-
-                html += `
-                            </div>
-                        </div>
-                    </div>
-                `;
+                html += `</div></div></div>`;
             });
-
             container.innerHTML = html;
         }
 
-        // إدارة السلة
         function addToCart(name, price) {
             let existingItem = cart.find(item => item.name === name);
             if (existingItem) {
@@ -571,22 +525,15 @@
             let countSpan = document.getElementById('cart-count');
             let listDiv = document.getElementById('cart-items-list');
             let totalDiv = document.getElementById('cartTotal');
-
-            let totalCount = 0;
-            let totalPrice = 0;
-            let listHTML = '';
+            let totalCount = 0, totalPrice = 0, listHTML = '';
 
             cart.forEach((item, index) => {
                 totalCount += item.quantity;
                 let itemTotal = item.price * item.quantity;
                 totalPrice += itemTotal;
-
                 listHTML += `
                     <div class="cart-item">
-                        <div>
-                            <strong>${item.name}</strong><br>
-                            <small>${item.price} ج × ${item.quantity}</small>
-                        </div>
+                        <div><strong>${item.name}</strong><br><small>${item.price} ج × ${item.quantity}</small></div>
                         <div>
                             <span style="font-weight: bold; color: #bc6c25; margin-left: 10px;">${itemTotal} ج</span>
                             <button onclick="removeItem(${index})" style="background: #e76f51; color: white; border: none; padding: 2px 6px; border-radius: 4px; cursor: pointer;"><i class="fa-solid fa-trash"></i></button>
@@ -595,36 +542,16 @@
                 `;
             });
 
-            if (cart.length === 0) {
-                listHTML = '<p style="text-align: center; color: #777; padding: 2rem 0;">السلة فارغة حالياً</p>';
-            }
-
+            if (cart.length === 0) listHTML = '<p style="text-align: center; color: #777; padding: 2rem 0;">السلة فارغة حالياً</p>';
             countSpan.innerText = totalCount;
             listDiv.innerHTML = listHTML;
             totalDiv.innerText = 'الإجمالي: ' + totalPrice + ' جنيه';
         }
 
-        function removeItem(index) {
-            cart.splice(index, 1);
-            updateCartUI();
-        }
-
-        function toggleCart() {
-            let modal = document.getElementById('cartModal');
-            modal.style.display = modal.style.display === 'flex' ? 'none' : 'flex';
-        }
-
-        // دوال لوحة التحكم (Admin Functions)
-        function openAdminModal() {
-            document.getElementById('adminModal').style.display = 'flex';
-            document.getElementById('adminLoginSection').style.display = 'block';
-            document.getElementById('adminDashboardSection').style.display = 'none';
-            document.getElementById('adminPasswordInput').value = '';
-        }
-
-        function closeAdminModal() {
-            document.getElementById('adminModal').style.display = 'none';
-        }
+        function removeItem(index) { cart.splice(index, 1); updateCartUI(); }
+        function toggleCart() { let m = document.getElementById('cartModal'); m.style.display = m.style.display === 'flex' ? 'none' : 'flex'; }
+        function openAdminModal() { document.getElementById('adminModal').style.display = 'flex'; }
+        function closeAdminModal() { document.getElementById('adminModal').style.display = 'none'; }
 
         function checkAdminLogin() {
             let pass = document.getElementById('adminPasswordInput').value;
@@ -640,129 +567,91 @@
         function renderAdminProductsList() {
             let listDiv = document.getElementById('adminProductsList');
             let html = '';
-
             products.forEach((prod, pIndex) => {
                 html += `<div style="background:#fff; padding:10px; border-radius:6px; margin-bottom:10px; border:1px solid #ddd;">
                     <strong>${prod.title}</strong> 
                     <button onclick="deleteProduct(${pIndex})" style="background:#e76f51; color:white; border:none; padding:2px 6px; border-radius:4px; float:left; cursor:pointer;">حذف المنتج</button>
                     <div style="margin-top:5px; font-size:0.9rem;">`;
-                
                 prod.prices.forEach((p, prIndex) => {
                     html += `<div style="display:flex; justify-content:space-between; align-items:center; margin-top:4px; background:#f9f9f9; padding:4px;">
                         <span>${p.size} : <b>${p.price}</b></span>
                         <div>
                             ${typeof p.price === 'number' ? `<input type="number" id="price_${pIndex}_${prIndex}" value="${p.price}" style="width:70px; padding:2px;"> <button onclick="updatePrice(${pIndex}, ${prIndex})" style="background:#283618; color:white; border:none; padding:2px 5px; border-radius:3px; cursor:pointer;">تحديث السعر</button>` : ''}
-                            <button onclick="deletePrice(${pIndex}, ${prIndex})" style="background:#cc0000; color:white; border:none; padding:2px 5px; border-radius:3px; cursor:pointer; margin-right:3px;">حذف الحجم</button>
                         </div>
                     </div>`;
                 });
-
                 html += `</div></div>`;
             });
-
             listDiv.innerHTML = html;
         }
 
-        function updatePrice(pIndex, prIndex) {
+        async function updatePrice(pIndex, prIndex) {
             let newVal = parseFloat(document.getElementById(`price_${pIndex}_${prIndex}`).value);
             if (!isNaN(newVal)) {
                 products[pIndex].prices[prIndex].price = newVal;
-                saveAndRefresh();
-                alert('تم تحديث السعر بنجاح!');
+                await saveToDatabase('productsData', JSON.stringify(products));
+                renderProducts();
+                alert('تم تحديث السعر وحفظه في Google Sheets!');
             }
         }
 
-        function deletePrice(pIndex, prIndex) {
-            if (confirm('هل أنت متأكد من حذف هذا الحجم؟')) {
-                products[pIndex].prices.splice(prIndex, 1);
-                saveAndRefresh();
-                renderAdminProductsList();
-            }
-        }
-
-        function deleteProduct(pIndex) {
-            if (confirm('هل أنت متأكد من حذف هذا المنتج بالكامل؟')) {
+        async function deleteProduct(pIndex) {
+            if (confirm('هل أنت متأكد من حذف المنتج؟')) {
                 products.splice(pIndex, 1);
-                saveAndRefresh();
+                await saveToDatabase('productsData', JSON.stringify(products));
+                renderProducts();
                 renderAdminProductsList();
             }
         }
 
-        function addNewProduct() {
+        async function addNewProduct() {
             let name = document.getElementById('newProdName').value.trim();
             let size = document.getElementById('newProdSize').value.trim();
             let price = parseFloat(document.getElementById('newProdPrice').value);
 
             if (!name || !size || isNaN(price)) {
-                alert('يرجى إدخال اسم المنتج، السعة، والسعر بشكل صحيح.');
+                alert('يرجى ملء جميع الحقول بشكل صحيح.');
                 return;
             }
 
-            // التحقق إذا كان المنتج موجوداً مسبقاً لإضافة الحجم له، أم إنشاء منتج جديد
             let existingProd = products.find(p => p.title === name);
             if (existingProd) {
                 existingProd.prices.push({ size: size, price: price });
             } else {
-                products.push({
-                    id: Date.now(),
-                    title: name,
-                    icon: "fa-solid fa-jar",
-                    prices: [{ size: size, price: price }]
-                });
+                products.push({ id: Date.now(), title: name, icon: "fa-solid fa-jar", prices: [{ size: size, price: price }] });
             }
 
-            document.getElementById('newProdName').value = '';
-            document.getElementById('newProdSize').value = '';
-            document.getElementById('newProdPrice').value = '';
-
-            saveAndRefresh();
+            await saveToDatabase('productsData', JSON.stringify(products));
+            renderProducts();
             renderAdminProductsList();
-            alert('تم إضافة المنتج بنجاح!');
+            alert('تم إضافة المنتج وحفظه بنجاح!');
         }
 
-        function changeAdminPassword() {
+        async function changeAdminPassword() {
             let newPass = document.getElementById('newAdminPass').value.trim();
             if (newPass.length < 4) {
-                alert('يجب أن تكون كلمة المرور 4 أحرف أو أرقام على الأقل.');
+                alert('كلمة المرور قصيرة جداً.');
                 return;
             }
             adminPassword = newPass;
-            localStorage.setItem('alawadly_admin_pass', adminPassword);
-            document.getElementById('newAdminPass').value = '';
-            alert('تم تغيير كلمة مرور لوحة التحكم بنجاح!');
-        }
-
-        function saveAndRefresh() {
-            localStorage.setItem('alawadly_products', JSON.stringify(products));
-            renderProducts();
+            await saveToDatabase('adminPassword', adminPassword);
+            alert('تم تحديث كلمة المرور في Google Sheets بنجاح!');
         }
 
         function checkoutWhatsApp() {
-            if (cart.length === 0) {
-                alert('السلة فارغة، برجاء إضافة منتجات أولاً.');
-                return;
-            }
-
+            if (cart.length === 0) return alert('السلة فارغة.');
             let message = "السلام عليكم، أرغب في طلب المنتجات التالية من العوادلي للعسل:\n\n";
             let totalPrice = 0;
-
             cart.forEach(item => {
                 let itemTotal = item.price * item.quantity;
                 totalPrice += itemTotal;
                 message += `🔹 ${item.name} (عدد: ${item.quantity}) - ${itemTotal} جنيه\n`;
             });
-
             message += `\n💰 الإجمالي الكلي: ${totalPrice} جنيه\n\nالعنوان: دنجواي - أول طريق الشط.`;
-
-            let phone = "201515382820";
-            let url = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
-            window.open(url, '_blank');
+            window.open(`https://wa.me/201515382820?text=${encodeURIComponent(message)}`, '_blank');
         }
 
-        // تشغيل عرض المنتجات عند تحميل الصفحة
-        window.onload = function() {
-            renderProducts();
-        };
+        window.onload = fetchDatabase;
     </script>
 </body>
 </html>
