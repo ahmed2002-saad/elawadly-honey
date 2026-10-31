@@ -425,8 +425,8 @@
     </footer>
 
     <script>
-        // تم ربط الكود بالرابط الخاص بك بنجاح
-        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzrhNx9PwFQcbr69PwYQWxMr8uQtBna2zviMtvlruK8EXRqdZKyXC05B5KRcqDk1TAo/exec";
+        // الرابط الجديد الخاص بك بعد التحديث
+        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwalKI7QEMYxsuuuPkzt2Ip2rbVEjd7xtTrQHspkyqyCw1RvUk5KJ4yGTQ17jvHI2Th/exec";
 
         let defaultProducts = [
             { id: 1, title: "عسل البرسيم", icon: "fa-solid fa-jar", prices: [{ size: "1 كيلو", price: 200 }, { size: "نصف كيلو", price: 110 }] },
@@ -436,7 +436,7 @@
         ];
 
         let products = [];
-        let adminPassword = "12345";
+        let adminPassword = "1234";
         let cart = [];
 
         async function fetchDatabase() {
@@ -445,7 +445,7 @@
                 let res = await fetch(GOOGLE_SCRIPT_URL);
                 let data = await res.json();
                 
-                if (data.adminPassword) {
+                if (data.adminPassword !== undefined) {
                     adminPassword = data.adminPassword;
                 }
                 if (data.productsData) {
@@ -554,8 +554,9 @@
         function closeAdminModal() { document.getElementById('adminModal').style.display = 'none'; }
 
         function checkAdminLogin() {
-            let pass = document.getElementById('adminPasswordInput').value;
-            if (pass === adminPassword) {
+            let pass = document.getElementById('adminPasswordInput').value.trim();
+            // مقارنة آمنة تحول القيمة إلى نص لتجنب خطأ أنواع البيانات
+            if (String(adminPassword).trim() === pass) {
                 document.getElementById('adminLoginSection').style.display = 'none';
                 document.getElementById('adminDashboardSection').style.display = 'block';
                 renderAdminProductsList();
