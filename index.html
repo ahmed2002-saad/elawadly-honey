@@ -413,6 +413,7 @@
                 </div>
                 <button class="admin-btn" onclick="changeAdminPassword()">حفظ كلمة المرور في Google Sheets</button>
 
+                <!-- هنا تم تحديث زر إغلاق لوحة التحكم -->
                 <button class="close-cart" onclick="closeAdminModal()" style="margin-top: 2rem;">إغلاق لوحة التحكم</button>
             </div>
         </div>
@@ -425,7 +426,6 @@
     </footer>
 
     <script>
-        // الرابط الجديد الخاص بك بعد التحديث
         const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwalKI7QEMYxsuuuPkzt2Ip2rbVEjd7xtTrQHspkyqyCw1RvUk5KJ4yGTQ17jvHI2Th/exec";
 
         let defaultProducts = [
@@ -550,12 +550,21 @@
 
         function removeItem(index) { cart.splice(index, 1); updateCartUI(); }
         function toggleCart() { let m = document.getElementById('cartModal'); m.style.display = m.style.display === 'flex' ? 'none' : 'flex'; }
-        function openAdminModal() { document.getElementById('adminModal').style.display = 'flex'; }
-        function closeAdminModal() { document.getElementById('adminModal').style.display = 'none'; }
+        
+        function openAdminModal() { 
+            document.getElementById('adminModal').style.display = 'flex'; 
+        }
+
+        // 🛑 التعديل هنا: عند إغلاق لوحة التحكم يتم تسجيل الخروج ومسح كلمة المرور 🛑
+        function closeAdminModal() { 
+            document.getElementById('adminModal').style.display = 'none'; 
+            document.getElementById('adminDashboardSection').style.display = 'none';
+            document.getElementById('adminLoginSection').style.display = 'block';
+            document.getElementById('adminPasswordInput').value = '';
+        }
 
         function checkAdminLogin() {
             let pass = document.getElementById('adminPasswordInput').value.trim();
-            // مقارنة آمنة تحول القيمة إلى نص لتجنب خطأ أنواع البيانات
             if (String(adminPassword).trim() === pass) {
                 document.getElementById('adminLoginSection').style.display = 'none';
                 document.getElementById('adminDashboardSection').style.display = 'block';
