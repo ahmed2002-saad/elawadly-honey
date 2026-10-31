@@ -32,6 +32,23 @@
             padding: 2rem 1rem;
             text-align: center;
             box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            position: relative;
+        }
+        .admin-login-btn {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: 1px solid rgba(255,255,255,0.4);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: background 0.2s;
+        }
+        .admin-login-btn:hover {
+            background: rgba(255,255,255,0.4);
         }
         header h1 {
             font-size: 2.2rem;
@@ -183,7 +200,7 @@
         .cart-float:hover {
             transform: scale(1.05);
         }
-        .cart-modal {
+        .cart-modal, .admin-modal {
             position: fixed;
             top: 0;
             left: 0;
@@ -195,13 +212,13 @@
             align-items: center;
             z-index: 2000;
         }
-        .cart-content {
+        .cart-content, .admin-content {
             background: white;
             width: 90%;
-            max-width: 500px;
+            max-width: 600px;
             padding: 2rem;
             border-radius: 12px;
-            max-height: 80vh;
+            max-height: 85vh;
             overflow-y: auto;
         }
         .cart-item {
@@ -233,7 +250,7 @@
             align-items: center;
             gap: 10px;
         }
-        .close-cart {
+        .close-cart, .close-admin {
             background: #e76f51;
             color: white;
             border: none;
@@ -255,6 +272,47 @@
             font-size: 1.1rem;
             margin-bottom: 0.5rem;
         }
+        /* Admin Dashboard Styles */
+        .admin-form-group {
+            margin-bottom: 1rem;
+        }
+        .admin-form-group label {
+            display: block;
+            margin-bottom: 0.3rem;
+            font-weight: bold;
+            color: var(--dark-color);
+        }
+        .admin-form-group input, .admin-form-group select {
+            width: 100%;
+            padding: 0.6rem;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 1rem;
+        }
+        .admin-btn {
+            background: var(--dark-color);
+            color: white;
+            border: none;
+            padding: 0.6rem 1.2rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: bold;
+            transition: background 0.2s;
+        }
+        .admin-btn:hover {
+            background: var(--accent-color);
+        }
+        .admin-product-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #f9f9f9;
+            padding: 0.8rem;
+            border-radius: 6px;
+            margin-bottom: 0.5rem;
+            border: 1px solid #eee;
+        }
         footer {
             background: var(--dark-color);
             color: white;
@@ -270,6 +328,7 @@
 <body>
 
     <header>
+        <button class="admin-login-btn" onclick="openAdminModal()"><i class="fa-solid fa-lock"></i> لوحة التحكم</button>
         <h1>🍯 العوادلي لتجارة جميع أنواع العسل الخام 🍯</h1>
         <p>عسل طبيعي بيور 100% – بدون تغذية – عسل علاجي بإذن الله</p>
         <div class="badge-secure">
@@ -278,128 +337,9 @@
     </header>
 
     <div class="container">
-
         <h2 class="section-title">قائمة المنتجات والأسعار</h2>
-
-        <div class="products-grid">
-            <!-- عسل البرسيم -->
-            <div class="product-card">
-                <div>
-                    <h3 class="product-title"><i class="fa-solid fa-jar"></i> عسل البرسيم</h3>
-                    <div class="price-options">
-                        <div class="price-row">
-                            <span>1 كيلو</span>
-                            <div><span class="price-tag">200 ج</span> <button class="add-btn" onclick="addToCart('عسل البرسيم (1 كيلو)', 200)">إضافة</button></div>
-                        </div>
-                        <div class="price-row">
-                            <span>نصف كيلو</span>
-                            <div><span class="price-tag">110 ج</span> <button class="add-btn" onclick="addToCart('عسل البرسيم (نصف كيلو)', 110)">إضافة</button></div>
-                        </div>
-                        <div class="price-row">
-                            <span>شمع البرسيم (1 كيلو)</span>
-                            <div><span class="price-tag">طلب خاص</span></div>
-                        </div>
-                        <div class="price-row">
-                            <span>شمع البرسيم (نصف كيلو)</span>
-                            <div><span class="price-tag">طلب خاص</span></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- عسل الموالح -->
-            <div class="product-card">
-                <div>
-                    <h3 class="product-title"><i class="fa-solid fa-lemon"></i> عسل الموالح (جودة ممتازة)</h3>
-                    <div class="price-options">
-                        <div class="price-row">
-                            <span>1 كيلو</span>
-                            <div><span class="price-tag">225 ج</span> <button class="add-btn" onclick="addToCart('عسل الموالح (1 كيلو)', 225)">إضافة</button></div>
-                        </div>
-                        <div class="price-row">
-                            <span>شمع الموالح (1 كيلو / نصف كيلو)</span>
-                            <div><span class="price-tag">متاح حسب الطلب</span></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- عسل حبة البركة -->
-            <div class="product-card">
-                <div>
-                    <h3 class="product-title"><i class="fa-solid fa-seedling"></i> عسل حبة البركة</h3>
-                    <div class="price-options">
-                        <div class="price-row">
-                            <span>1 كيلو</span>
-                            <div><span class="price-tag">300 ج</span> <button class="add-btn" onclick="addToCart('عسل حبة البركة (1 كيلو)', 300)">إضافة</button></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- عسل السدر -->
-            <div class="product-card">
-                <div>
-                    <h3 class="product-title"><i class="fa-solid fa-crown"></i> عسل السدر (جودة ممتازة جداً)</h3>
-                    <div class="price-options">
-                        <div class="price-row">
-                            <span>1 كيلو</span>
-                            <div><span class="price-tag">750 ج</span> <button class="add-btn" onclick="addToCart('عسل السدر (1 كيلو)', 750)">إضافة</button></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- عسل بالمكسرات -->
-            <div class="product-card">
-                <div>
-                    <h3 class="product-title"><i class="fa-solid fa-bowl-food"></i> عسل بالمكسرات</h3>
-                    <div class="price-options">
-                        <div class="price-row">
-                            <span>نصف كيلو</span>
-                            <div><span class="price-tag">200 ج</span> <button class="add-btn" onclick="addToCart('عسل بالمكسرات (نصف كيلو)', 200)">إضافة</button></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- عسل خلطة للمتزوجين -->
-            <div class="product-card">
-                <div>
-                    <h3 class="product-title"><i class="fa-solid fa-fire"></i> عسل خلطة للمتزوجين</h3>
-                    <div class="price-options">
-                        <div class="price-row">
-                            <span>ربع كيلو مستورد ومجرب</span>
-                            <div><span class="price-tag">450 ج</span> <button class="add-btn" onclick="addToCart('خلطة المتزوجين (ربع كيلو)', 450)">إضافة</button></div>
-                        </div>
-                        <div class="price-row">
-                            <span>علبة باكوات (12 باكو)</span>
-                            <div><span class="price-tag">400 ج</span> <button class="add-btn" onclick="addToCart('علبة باكوات متزوجين (12 باكو)', 400)">إضافة</button></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- زيت الزيتون والمقويات -->
-            <div class="product-card">
-                <div>
-                    <h3 class="product-title"><i class="fa-solid fa-oil-can"></i> زيت الزيتون والمقويات</h3>
-                    <div class="price-options">
-                        <div class="price-row">
-                            <span>زيت زيتون (لتر)</span>
-                            <div><span class="price-tag">650 ج</span> <button class="add-btn" onclick="addToCart('زيت زيتون (لتر)', 650)">إضافة</button></div>
-                        </div>
-                        <div class="price-row">
-                            <span>زيت زيتون (نصف لتر)</span>
-                            <div><span class="price-tag">330 ج</span> <button class="add-btn" onclick="addToCart('زيت زيتون (نصف لتر)', 330)">إضافة</button></div>
-                        </div>
-                        <div class="price-row">
-                            <span>غذاء ملكات النحل / حبوب لقاح / جينسينج / عكبر / طلع</span>
-                            <div><span class="price-tag">متوفر</span></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <div class="products-grid" id="products-container">
+            <!-- سيتم تعبئة المنتجات ديناميكياً عبر الجافاسكريبت -->
         </div>
 
         <!-- الخلطات العلاجية -->
@@ -422,7 +362,6 @@
             <p style="font-size: 1.2rem; font-weight: bold; color: var(--dark-color);">يمكنك التذوق بنفسك قبل الشراء 🍯</p>
             <p style="margin-top: 1rem; color: #555;"><i class="fa-solid fa-location-dot" style="color: #e76f51;"></i> <strong>العنوان:</strong> دنجواي - أول طريق الشط - بجوار عيادة الدكتور محمد عبدالسلام</p>
         </div>
-
     </div>
 
     <!-- سلة المشتريات العائمة -->
@@ -435,14 +374,68 @@
     <div class="cart-modal" id="cartModal">
         <div class="cart-content">
             <h2 style="color: var(--dark-color); margin-bottom: 1rem;"><i class="fa-solid fa-basket-shopping"></i> سلة طلبات العسل</h2>
-            <div id="cart-items-list">
-                <!-- المنتجات المضافة ستظهر هنا -->
-            </div>
+            <div id="cart-items-list"></div>
             <div class="cart-total" id="cartTotal">الإجمالي: 0 جنيه</div>
             <button class="checkout-whatsapp" onclick="checkoutWhatsApp()">
                 <i class="fa-brands fa-whatsapp" style="font-size: 1.4rem;"></i> إرسال الطلب عبر واتساب
             </button>
             <button class="close-cart" onclick="toggleCart()">إغلاق</button>
+        </div>
+    </div>
+
+    <!-- نافذة لوحة التحكم (Admin Panel) -->
+    <div class="admin-modal" id="adminModal">
+        <div class="admin-content" id="adminModalContent">
+            <!-- مرحلة تسجيل الدخول -->
+            <div id="adminLoginSection">
+                <h2 style="color: var(--dark-color); margin-bottom: 1rem;"><i class="fa-solid fa-lock"></i> تسجيل دخول المسؤول</h2>
+                <div class="admin-form-group">
+                    <label>كلمة المرور:</label>
+                    <input type="password" id="adminPasswordInput" placeholder="أدخل كلمة المرور">
+                </div>
+                <button class="admin-btn" onclick="checkAdminLogin()">دخول</button>
+                <button class="close-cart" onclick="closeAdminModal()">إلغاء</button>
+            </div>
+
+            <!-- مرحلة لوحة التحكم بعد الدخول -->
+            <div id="adminDashboardSection" style="display: none;">
+                <h2 style="color: var(--dark-color); margin-bottom: 1rem;"><i class="fa-solid fa-gears"></i> لوحة تحكم المنتجات والأسعار</h2>
+                
+                <hr style="margin: 1rem 0; border: 0; border-top: 1px solid #ddd;">
+                
+                <h3 style="color: var(--accent-color); margin-bottom: 0.5rem;">إضافة منتج جديد</h3>
+                <div class="admin-form-group">
+                    <label>اسم المنتج:</label>
+                    <input type="text" id="newProdName" placeholder="مثال: عسل سدر فاخر">
+                </div>
+                <div class="admin-form-group">
+                    <label>وصف حجم العبوة أو السعة:</label>
+                    <input type="text" id="newProdSize" placeholder="مثال: 1 كيلو">
+                </div>
+                <div class="admin-form-group">
+                    <label>السعر (بالجنيه):</label>
+                    <input type="number" id="newProdPrice" placeholder="مثال: 800">
+                </div>
+                <button class="admin-btn" onclick="addNewProduct()">إضافة المنتج</button>
+
+                <hr style="margin: 1.5rem 0; border: 0; border-top: 1px solid #ddd;">
+
+                <h3 style="color: var(--accent-color); margin-bottom: 0.5rem;">إدارة المنتجات والأسعار الحالية</h3>
+                <div id="adminProductsList" style="max-height: 250px; overflow-y: auto; margin-bottom: 1.5rem;">
+                    <!-- يتم تعبئتها ديناميكياً -->
+                </div>
+
+                <hr style="margin: 1.5rem 0; border: 0; border-top: 1px solid #ddd;">
+
+                <h3 style="color: var(--accent-color); margin-bottom: 0.5rem;">تغيير كلمة مرور لوحة التحكم</h3>
+                <div class="admin-form-group">
+                    <label>كلمة المرور الجديدة:</label>
+                    <input type="password" id="newAdminPass" placeholder="أدخل كلمة المرور الجديدة">
+                </div>
+                <button class="admin-btn" onclick="changeAdminPassword()">حفظ كلمة المرور الجديدة</button>
+
+                <button class="close-cart" onclick="closeAdminModal()" style="margin-top: 2rem;">إغلاق لوحة التحكم</button>
+            </div>
         </div>
     </div>
 
@@ -453,8 +446,116 @@
     </footer>
 
     <script>
+        // المنتجات الافتراضية
+        let defaultProducts = [
+            {
+                id: 1,
+                title: "عسل البرسيم",
+                icon: "fa-solid fa-jar",
+                prices: [
+                    { size: "1 كيلو", price: 200 },
+                    { size: "نصف كيلو", price: 110 },
+                    { size: "شمع البرسيم (1 كيلو)", price: "طلب خاص" },
+                    { size: "شمع البرسيم (نصف كيلو)", price: "طلب خاص" }
+                ]
+            },
+            {
+                id: 2,
+                title: "عسل الموالح (جودة ممتازة)",
+                icon: "fa-solid fa-lemon",
+                prices: [
+                    { size: "1 كيلو", price: 225 },
+                    { size: "شمع الموالح (1 كيلو / نصف كيلو)", price: "متاح حسب الطلب" }
+                ]
+            },
+            {
+                id: 3,
+                title: "عسل حبة البركة",
+                icon: "fa-solid fa-seedling",
+                prices: [
+                    { size: "1 كيلو", price: 300 }
+                ]
+            },
+            {
+                id: 4,
+                title: "عسل السدر (جودة ممتازة جداً)",
+                icon: "fa-solid fa-crown",
+                prices: [
+                    { size: "1 كيلو", price: 750 }
+                ]
+            },
+            {
+                id: 5,
+                title: "عسل بالمكسرات",
+                icon: "fa-solid fa-bowl-food",
+                prices: [
+                    { size: "نصف كيلو", price: 200 }
+                ]
+            },
+            {
+                id: 6,
+                title: "عسل خلطة للمتزوجين",
+                icon: "fa-solid fa-fire",
+                prices: [
+                    { size: "ربع كيلو مستورد ومجرب", price: 450 },
+                    { size: "علبة باكوات (12 باكو)", price: 400 }
+                ]
+            },
+            {
+                id: 7,
+                title: "زيت الزيتون والمقويات",
+                icon: "fa-solid fa-oil-can",
+                prices: [
+                    { size: "زيت زيتون (لتر)", price: 650 },
+                    { size: "زيت زيتون (نصف لتر)", price: 330 },
+                    { size: "غذاء ملكات النحل / حبوب لقاح / جينسينج / عكبر / طلع", price: "متوفر" }
+                ]
+            }
+        ];
+
+        // تحميل المنتجات وكلمة المرور من التخزين المحلي أو استخدام الافتراضية
+        let products = JSON.parse(localStorage.getItem('alawadly_products')) || defaultProducts;
+        let adminPassword = localStorage.getItem('alawadly_admin_pass') || "12345"; // كلمة المرور الافتراضية 12345 ويمكنك تغييرها
+
         let cart = [];
 
+        // عرض المنتجات في الصفحة الرئيسية
+        function renderProducts() {
+            let container = document.getElementById('products-container');
+            let html = '';
+
+            products.forEach(prod => {
+                html += `
+                    <div class="product-card">
+                        <div>
+                            <h3 class="product-title"><i class="${prod.icon || 'fa-solid fa-jar'}"></i> ${prod.title}</h3>
+                            <div class="price-options">
+                `;
+                
+                prod.prices.forEach(p => {
+                    let isNumeric = typeof p.price === 'number';
+                    let priceTagHTML = isNumeric ? `<span class="price-tag">${p.price} ج</span>` : `<span class="price-tag">${p.price}</span>`;
+                    let addBtnHTML = isNumeric ? `<button class="add-btn" onclick="addToCart('${prod.title} (${p.size})', ${p.price})">إضافة</button>` : '';
+                    
+                    html += `
+                        <div class="price-row">
+                            <span>${p.size}</span>
+                            <div>${priceTagHTML} ${addBtnHTML}</div>
+                        </div>
+                    `;
+                });
+
+                html += `
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html;
+        }
+
+        // إدارة السلة
         function addToCart(name, price) {
             let existingItem = cart.find(item => item.name === name);
             if (existingItem) {
@@ -513,6 +614,129 @@
             modal.style.display = modal.style.display === 'flex' ? 'none' : 'flex';
         }
 
+        // دوال لوحة التحكم (Admin Functions)
+        function openAdminModal() {
+            document.getElementById('adminModal').style.display = 'flex';
+            document.getElementById('adminLoginSection').style.display = 'block';
+            document.getElementById('adminDashboardSection').style.display = 'none';
+            document.getElementById('adminPasswordInput').value = '';
+        }
+
+        function closeAdminModal() {
+            document.getElementById('adminModal').style.display = 'none';
+        }
+
+        function checkAdminLogin() {
+            let pass = document.getElementById('adminPasswordInput').value;
+            if (pass === adminPassword) {
+                document.getElementById('adminLoginSection').style.display = 'none';
+                document.getElementById('adminDashboardSection').style.display = 'block';
+                renderAdminProductsList();
+            } else {
+                alert('كلمة المرور غير صحيحة!');
+            }
+        }
+
+        function renderAdminProductsList() {
+            let listDiv = document.getElementById('adminProductsList');
+            let html = '';
+
+            products.forEach((prod, pIndex) => {
+                html += `<div style="background:#fff; padding:10px; border-radius:6px; margin-bottom:10px; border:1px solid #ddd;">
+                    <strong>${prod.title}</strong> 
+                    <button onclick="deleteProduct(${pIndex})" style="background:#e76f51; color:white; border:none; padding:2px 6px; border-radius:4px; float:left; cursor:pointer;">حذف المنتج</button>
+                    <div style="margin-top:5px; font-size:0.9rem;">`;
+                
+                prod.prices.forEach((p, prIndex) => {
+                    html += `<div style="display:flex; justify-content:space-between; align-items:center; margin-top:4px; background:#f9f9f9; padding:4px;">
+                        <span>${p.size} : <b>${p.price}</b></span>
+                        <div>
+                            ${typeof p.price === 'number' ? `<input type="number" id="price_${pIndex}_${prIndex}" value="${p.price}" style="width:70px; padding:2px;"> <button onclick="updatePrice(${pIndex}, ${prIndex})" style="background:#283618; color:white; border:none; padding:2px 5px; border-radius:3px; cursor:pointer;">تحديث السعر</button>` : ''}
+                            <button onclick="deletePrice(${pIndex}, ${prIndex})" style="background:#cc0000; color:white; border:none; padding:2px 5px; border-radius:3px; cursor:pointer; margin-right:3px;">حذف الحجم</button>
+                        </div>
+                    </div>`;
+                });
+
+                html += `</div></div>`;
+            });
+
+            listDiv.innerHTML = html;
+        }
+
+        function updatePrice(pIndex, prIndex) {
+            let newVal = parseFloat(document.getElementById(`price_${pIndex}_${prIndex}`).value);
+            if (!isNaN(newVal)) {
+                products[pIndex].prices[prIndex].price = newVal;
+                saveAndRefresh();
+                alert('تم تحديث السعر بنجاح!');
+            }
+        }
+
+        function deletePrice(pIndex, prIndex) {
+            if (confirm('هل أنت متأكد من حذف هذا الحجم؟')) {
+                products[pIndex].prices.splice(prIndex, 1);
+                saveAndRefresh();
+                renderAdminProductsList();
+            }
+        }
+
+        function deleteProduct(pIndex) {
+            if (confirm('هل أنت متأكد من حذف هذا المنتج بالكامل؟')) {
+                products.splice(pIndex, 1);
+                saveAndRefresh();
+                renderAdminProductsList();
+            }
+        }
+
+        function addNewProduct() {
+            let name = document.getElementById('newProdName').value.trim();
+            let size = document.getElementById('newProdSize').value.trim();
+            let price = parseFloat(document.getElementById('newProdPrice').value);
+
+            if (!name || !size || isNaN(price)) {
+                alert('يرجى إدخال اسم المنتج، السعة، والسعر بشكل صحيح.');
+                return;
+            }
+
+            // التحقق إذا كان المنتج موجوداً مسبقاً لإضافة الحجم له، أم إنشاء منتج جديد
+            let existingProd = products.find(p => p.title === name);
+            if (existingProd) {
+                existingProd.prices.push({ size: size, price: price });
+            } else {
+                products.push({
+                    id: Date.now(),
+                    title: name,
+                    icon: "fa-solid fa-jar",
+                    prices: [{ size: size, price: price }]
+                });
+            }
+
+            document.getElementById('newProdName').value = '';
+            document.getElementById('newProdSize').value = '';
+            document.getElementById('newProdPrice').value = '';
+
+            saveAndRefresh();
+            renderAdminProductsList();
+            alert('تم إضافة المنتج بنجاح!');
+        }
+
+        function changeAdminPassword() {
+            let newPass = document.getElementById('newAdminPass').value.trim();
+            if (newPass.length < 4) {
+                alert('يجب أن تكون كلمة المرور 4 أحرف أو أرقام على الأقل.');
+                return;
+            }
+            adminPassword = newPass;
+            localStorage.setItem('alawadly_admin_pass', adminPassword);
+            document.getElementById('newAdminPass').value = '';
+            alert('تم تغيير كلمة مرور لوحة التحكم بنجاح!');
+        }
+
+        function saveAndRefresh() {
+            localStorage.setItem('alawadly_products', JSON.stringify(products));
+            renderProducts();
+        }
+
         function checkoutWhatsApp() {
             if (cart.length === 0) {
                 alert('السلة فارغة، برجاء إضافة منتجات أولاً.');
@@ -530,10 +754,15 @@
 
             message += `\n💰 الإجمالي الكلي: ${totalPrice} جنيه\n\nالعنوان: دنجواي - أول طريق الشط.`;
 
-            let phone = "201515382820"; // رقم الواتساب بدون علامة +
+            let phone = "201515382820";
             let url = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
             window.open(url, '_blank');
         }
+
+        // تشغيل عرض المنتجات عند تحميل الصفحة
+        window.onload = function() {
+            renderProducts();
+        };
     </script>
 </body>
 </html>
