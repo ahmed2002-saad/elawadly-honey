@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>العوادلي لتجارة جميع أنواع العسل الخام</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #d4a373;
+            --secondary-color: #dda15e;
+            --dark-color: #283618;
+            --light-color: #fefae0;
+            --accent-color: #bc6c25;
+            --text-color: #333333;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Tajawal', sans-serif;
+        }
+        body {
+            background-color: #fcf9f2;
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+        header {
+            background: linear-gradient(135deg, var(--dark-color), #386641);
+            color: white;
+            padding: 2rem 1rem;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        header h1 {
+            font-size: 2.2rem;
+            margin-bottom: 0.5rem;
+            color: #f4a261;
+        }
+        header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        .badge-secure {
+            display: inline-block;
+            background: rgba(255,255,255,0.15);
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            margin-top: 1rem;
+            font-size: 0.95rem;
+            border: 1px solid rgba(244,162,97,0.4);
+        }
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+        .section-title {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: var(--dark-color);
+            font-size: 1.8rem;
+            position: relative;
+        }
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 60px;
+            height: 3px;
+            background: var(--accent-color);
+            margin: 0.5rem auto 0;
+            border-radius: 2px;
+        }
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+        .product-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease;
+            border: 1px solid #eee;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(212, 163, 115, 0.2);
+        }
+        .product-title {
+            font-size: 1.3rem;
+            color: var(--dark-color);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .price-options {
+            margin-bottom: 1rem;
+        }
+        .price-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.50rem 0;
+            border-bottom: 1px dashed #eee;
+        }
+        .price-row:last-child {
+            border-bottom: none;
+        }
+        .price-tag {
+            font-weight: bold;
+            color: var(--accent-color);
+            background: #faedcd;
+            padding: 0.2rem 0.6rem;
+            border-radius: 6px;
+            font-size: 0.95rem;
+        }
+        .add-btn {
+            background: var(--dark-color);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: background 0.2s;
+        }
+        .add-btn:hover {
+            background: var(--accent-color);
+        }
+        .special-mix-box {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            margin-bottom: 3rem;
+            border-right: 5px solid var(--accent-color);
+        }
+        .special-mix-box ul {
+            list-style: none;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        .special-mix-box li {
+            background: #fdfcdc;
+            padding: 0.8rem 1rem;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .special-mix-box li i {
+            color: var(--accent-color);
+        }
+        /* Cart Floating Bar */
+        .cart-float {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background: #25d366;
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border-radius: 30px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: bold;
+            z-index: 1000;
+            transition: transform 0.2s;
+        }
+        .cart-float:hover {
+            transform: scale(1.05);
+        }
+        .cart-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+        }
+        .cart-content {
+            background: white;
+            width: 90%;
+            max-width: 500px;
+            padding: 2rem;
+            border-radius: 12px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.8rem 0;
+            border-bottom: 1px solid #eee;
+        }
+        .cart-total {
+            font-size: 1.2rem;
+            font-weight: bold;
+            text-align: left;
+            margin: 1.5rem 0;
+            color: var(--dark-color);
+        }
+        .checkout-whatsapp {
+            background: #25d366;
+            color: white;
+            width: 100%;
+            padding: 0.8rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+        .close-cart {
+            background: #e76f51;
+            color: white;
+            border: none;
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-top: 1rem;
+            width: 100%;
+        }
+        .info-section {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            text-align: center;
+            margin-bottom: 3rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+        .info-section p {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+        footer {
+            background: var(--dark-color);
+            color: white;
+            text-align: center;
+            padding: 2rem 1rem;
+            margin-top: 3rem;
+        }
+        footer p {
+            margin: 0.3rem 0;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>🍯 العوادلي لتجارة جميع أنواع العسل الخام 🍯</h1>
+        <p>عسل طبيعي بيور 100% – بدون تغذية – عسل علاجي بإذن الله</p>
+        <div class="badge-secure">
+            ✨ آمن لمرضى السكر – خالٍ من السكروز ✨
+        </div>
+    </header>
+
+    <div class="container">
+
+        <h2 class="section-title">قائمة المنتجات والأسعار</h2>
+
+        <div class="products-grid">
+            <!-- عسل البرسيم -->
+            <div class="product-card">
+                <div>
+                    <h3 class="product-title"><i class="fa-solid fa-jar"></i> عسل البرسيم</h3>
+                    <div class="price-options">
+                        <div class="price-row">
+                            <span>1 كيلو</span>
+                            <div><span class="price-tag">200 ج</span> <button class="add-btn" onclick="addToCart('عسل البرسيم (1 كيلو)', 200)">إضافة</button></div>
+                        </div>
+                        <div class="price-row">
+                            <span>نصف كيلو</span>
+                            <div><span class="price-tag">110 ج</span> <button class="add-btn" onclick="addToCart('عسل البرسيم (نصف كيلو)', 110)">إضافة</button></div>
+                        </div>
+                        <div class="price-row">
+                            <span>شمع البرسيم (1 كيلو)</span>
+                            <div><span class="price-tag">طلب خاص</span></div>
+                        </div>
+                        <div class="price-row">
+                            <span>شمع البرسيم (نصف كيلو)</span>
+                            <div><span class="price-tag">طلب خاص</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- عسل الموالح -->
+            <div class="product-card">
+                <div>
+                    <h3 class="product-title"><i class="fa-solid fa-lemon"></i> عسل الموالح (جودة ممتازة)</h3>
+                    <div class="price-options">
+                        <div class="price-row">
+                            <span>1 كيلو</span>
+                            <div><span class="price-tag">225 ج</span> <button class="add-btn" onclick="addToCart('عسل الموالح (1 كيلو)', 225)">إضافة</button></div>
+                        </div>
+                        <div class="price-row">
+                            <span>شمع الموالح (1 كيلو / نصف كيلو)</span>
+                            <div><span class="price-tag">متاح حسب الطلب</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- عسل حبة البركة -->
+            <div class="product-card">
+                <div>
+                    <h3 class="product-title"><i class="fa-solid fa-seedling"></i> عسل حبة البركة</h3>
+                    <div class="price-options">
+                        <div class="price-row">
+                            <span>1 كيلو</span>
+                            <div><span class="price-tag">300 ج</span> <button class="add-btn" onclick="addToCart('عسل حبة البركة (1 كيلو)', 300)">إضافة</button></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- عسل السدر -->
+            <div class="product-card">
+                <div>
+                    <h3 class="product-title"><i class="fa-solid fa-crown"></i> عسل السدر (جودة ممتازة جداً)</h3>
+                    <div class="price-options">
+                        <div class="price-row">
+                            <span>1 كيلو</span>
+                            <div><span class="price-tag">750 ج</span> <button class="add-btn" onclick="addToCart('عسل السدر (1 كيلو)', 750)">إضافة</button></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- عسل بالمكسرات -->
+            <div class="product-card">
+                <div>
+                    <h3 class="product-title"><i class="fa-solid fa-bowl-food"></i> عسل بالمكسرات</h3>
+                    <div class="price-options">
+                        <div class="price-row">
+                            <span>نصف كيلو</span>
+                            <div><span class="price-tag">200 ج</span> <button class="add-btn" onclick="addToCart('عسل بالمكسرات (نصف كيلو)', 200)">إضافة</button></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- عسل خلطة للمتزوجين -->
+            <div class="product-card">
+                <div>
+                    <h3 class="product-title"><i class="fa-solid fa-fire"></i> عسل خلطة للمتزوجين</h3>
+                    <div class="price-options">
+                        <div class="price-row">
+                            <span>ربع كيلو مستورد ومجرب</span>
+                            <div><span class="price-tag">450 ج</span> <button class="add-btn" onclick="addToCart('خلطة المتزوجين (ربع كيلو)', 450)">إضافة</button></div>
+                        </div>
+                        <div class="price-row">
+                            <span>علبة باكوات (12 باكو)</span>
+                            <div><span class="price-tag">400 ج</span> <button class="add-btn" onclick="addToCart('علبة باكوات متزوجين (12 باكو)', 400)">إضافة</button></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- زيت الزيتون والمقويات -->
+            <div class="product-card">
+                <div>
+                    <h3 class="product-title"><i class="fa-solid fa-oil-can"></i> زيت الزيتون والمقويات</h3>
+                    <div class="price-options">
+                        <div class="price-row">
+                            <span>زيت زيتون (لتر)</span>
+                            <div><span class="price-tag">650 ج</span> <button class="add-btn" onclick="addToCart('زيت زيتون (لتر)', 650)">إضافة</button></div>
+                        </div>
+                        <div class="price-row">
+                            <span>زيت زيتون (نصف لتر)</span>
+                            <div><span class="price-tag">330 ج</span> <button class="add-btn" onclick="addToCart('زيت زيتون (نصف لتر)', 330)">إضافة</button></div>
+                        </div>
+                        <div class="price-row">
+                            <span>غذاء ملكات النحل / حبوب لقاح / جينسينج / عكبر / طلع</span>
+                            <div><span class="price-tag">متوفر</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- الخلطات العلاجية -->
+        <div class="special-mix-box">
+            <h3 style="color: var(--dark-color); margin-bottom: 0.5rem;"><i class="fa-solid fa-mortar-pestle"></i> خلطات علاجية خاصة حسب الحاجة:</h3>
+            <p style="color: #666; font-size: 0.95rem;">يمكننا تحضير الخلطات خصيصاً للحالات الآتية:</p>
+            <ul>
+                <li><i class="fa-solid fa-check"></i> تقوية الذاكرة والتركيز</li>
+                <li><i class="fa-solid fa-check"></i> تقوية جهاز المناعة</li>
+                <li><i class="fa-solid fa-check"></i> زيادة النشاط والطاقة</li>
+                <li><i class="fa-solid fa-check"></i> تنشيط الدورة الدموية</li>
+                <li><i class="fa-solid fa-check"></i> مشاكل المعدة والجهاز الهضمي</li>
+                <li><i class="fa-solid fa-check"></i> الأمور الزوجية</li>
+            </ul>
+        </div>
+
+        <!-- ضمان الثقة -->
+        <div class="info-section">
+            <h3 style="color: var(--accent-color); margin-bottom: 0.8rem;"><i class="fa-solid fa-handshake"></i> وللثقة التامة:</h3>
+            <p style="font-size: 1.2rem; font-weight: bold; color: var(--dark-color);">يمكنك التذوق بنفسك قبل الشراء 🍯</p>
+            <p style="margin-top: 1rem; color: #555;"><i class="fa-solid fa-location-dot" style="color: #e76f51;"></i> <strong>العنوان:</strong> دنجواي - أول طريق الشط - بجوار عيادة الدكتور محمد عبدالسلام</p>
+        </div>
+
+    </div>
+
+    <!-- سلة المشتريات العائمة -->
+    <div class="cart-float" onclick="toggleCart()">
+        <i class="fa-solid fa-cart-shopping"></i>
+        <span>سلة الطلبات (<span id="cart-count">0</span>)</span>
+    </div>
+
+    <!-- نافذة السلة -->
+    <div class="cart-modal" id="cartModal">
+        <div class="cart-content">
+            <h2 style="color: var(--dark-color); margin-bottom: 1rem;"><i class="fa-solid fa-basket-shopping"></i> سلة طلبات العسل</h2>
+            <div id="cart-items-list">
+                <!-- المنتجات المضافة ستظهر هنا -->
+            </div>
+            <div class="cart-total" id="cartTotal">الإجمالي: 0 جنيه</div>
+            <button class="checkout-whatsapp" onclick="checkoutWhatsApp()">
+                <i class="fa-brands fa-whatsapp" style="font-size: 1.4rem;"></i> إرسال الطلب عبر واتساب
+            </button>
+            <button class="close-cart" onclick="toggleCart()">إغلاق</button>
+        </div>
+    </div>
+
+    <footer>
+        <p><strong>د. محمد السيد العوادلي</strong></p>
+        <p><i class="fa-solid fa-phone"></i> هاتف: 01019294380 | <i class="fa-brands fa-whatsapp"></i> واتس: 01515382820</p>
+        <p style="font-size: 0.85rem; opacity: 0.8; margin-top: 1rem;">جميع الحقوق محفوظة © 2026</p>
+    </footer>
+
+    <script>
+        let cart = [];
+
+        function addToCart(name, price) {
+            let existingItem = cart.find(item => item.name === name);
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                cart.push({ name: name, price: price, quantity: 1 });
+            }
+            updateCartUI();
+            alert("تم إضافة (" + name + ") إلى السلة بنجاح! 🍯");
+        }
+
+        function updateCartUI() {
+            let countSpan = document.getElementById('cart-count');
+            let listDiv = document.getElementById('cart-items-list');
+            let totalDiv = document.getElementById('cartTotal');
+
+            let totalCount = 0;
+            let totalPrice = 0;
+            let listHTML = '';
+
+            cart.forEach((item, index) => {
+                totalCount += item.quantity;
+                let itemTotal = item.price * item.quantity;
+                totalPrice += itemTotal;
+
+                listHTML += `
+                    <div class="cart-item">
+                        <div>
+                            <strong>${item.name}</strong><br>
+                            <small>${item.price} ج × ${item.quantity}</small>
+                        </div>
+                        <div>
+                            <span style="font-weight: bold; color: #bc6c25; margin-left: 10px;">${itemTotal} ج</span>
+                            <button onclick="removeItem(${index})" style="background: #e76f51; color: white; border: none; padding: 2px 6px; border-radius: 4px; cursor: pointer;"><i class="fa-solid fa-trash"></i></button>
+                        </div>
+                    </div>
+                `;
+            });
+
+            if (cart.length === 0) {
+                listHTML = '<p style="text-align: center; color: #777; padding: 2rem 0;">السلة فارغة حالياً</p>';
+            }
+
+            countSpan.innerText = totalCount;
+            listDiv.innerHTML = listHTML;
+            totalDiv.innerText = 'الإجمالي: ' + totalPrice + ' جنيه';
+        }
+
+        function removeItem(index) {
+            cart.splice(index, 1);
+            updateCartUI();
+        }
+
+        function toggleCart() {
+            let modal = document.getElementById('cartModal');
+            modal.style.display = modal.style.display === 'flex' ? 'none' : 'flex';
+        }
+
+        function checkoutWhatsApp() {
+            if (cart.length === 0) {
+                alert('السلة فارغة، برجاء إضافة منتجات أولاً.');
+                return;
+            }
+
+            let message = "السلام عليكم، أرغب في طلب المنتجات التالية من العوادلي للعسل:\n\n";
+            let totalPrice = 0;
+
+            cart.forEach(item => {
+                let itemTotal = item.price * item.quantity;
+                totalPrice += itemTotal;
+                message += `🔹 ${item.name} (عدد: ${item.quantity}) - ${itemTotal} جنيه\n`;
+            });
+
+            message += `\n💰 الإجمالي الكلي: ${totalPrice} جنيه\n\nالعنوان: دنجواي - أول طريق الشط.`;
+
+            let phone = "201515382820"; // رقم الواتساب بدون علامة +
+            let url = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
+            window.open(url, '_blank');
+        }
+    </script>
+</body>
+</html>
