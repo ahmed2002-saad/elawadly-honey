@@ -231,8 +231,30 @@
             font-size: 1.2rem;
             font-weight: bold;
             text-align: left;
-            margin: 1.5rem 0;
+            margin: 1rem 0;
             color: var(--dark-color);
+        }
+        .customer-inputs {
+            background: #fdfcdc;
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            border: 1px solid #faedcd;
+        }
+        .customer-inputs label {
+            display: block;
+            margin-bottom: 0.3rem;
+            font-weight: bold;
+            color: var(--dark-color);
+            font-size: 0.95rem;
+        }
+        .customer-inputs input {
+            width: 100%;
+            padding: 0.6rem;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 1rem;
+            margin-bottom: 0.8rem;
         }
         .checkout-whatsapp {
             background: #25d366;
@@ -346,7 +368,7 @@
         <div class="info-section">
             <h3 style="color: var(--accent-color); margin-bottom: 0.8rem;"><i class="fa-solid fa-handshake"></i> وللثقة التامة:</h3>
             <p style="font-size: 1.2rem; font-weight: bold; color: var(--dark-color);">يمكنك التذوق بنفسك قبل الشراء 🍯</p>
-            <p style="margin-top: 1rem; color: #555;"><i class="fa-solid fa-location-dot" style="color: #e76f51;"></i> <strong>العنوان:</strong> دنجواي - أول طريق الشط - بجوار عيادة الدكتور محمد عبدالسلام</p>
+            <p style="margin-top: 1rem; color: #555;"><i class="fa-solid fa-location-dot" style="color: #e76f51;"></i> <strong>العنوان الرئيسي:</strong> دنجواي - أول طريق الشط - بجوار عيادة الدكتور محمد عبدالسلام</p>
         </div>
     </div>
 
@@ -355,11 +377,27 @@
         <span>سلة الطلبات (<span id="cart-count">0</span>)</span>
     </div>
 
+    <!-- نافذة السلة المحدثة -->
     <div class="cart-modal" id="cartModal">
         <div class="cart-content">
             <h2 style="color: var(--dark-color); margin-bottom: 1rem;"><i class="fa-solid fa-basket-shopping"></i> سلة طلبات العسل</h2>
             <div id="cart-items-list"></div>
+            
             <div class="cart-total" id="cartTotal">الإجمالي: 0 جنيه</div>
+
+            <!-- خانات إدخال بيانات العميل (الاسم والعنوان) -->
+            <div class="customer-inputs">
+                <h3 style="color: var(--dark-color); font-size: 1rem; margin-bottom: 0.5rem;"><i class="fa-solid fa-user"></i> بيانات التوصيل:</h3>
+                <div>
+                    <label>الاسم الكريم:</label>
+                    <input type="text" id="customerName" placeholder="أدخل اسمك الكامل">
+                </div>
+                <div>
+                    <label>العنوان بالتفصيل:</label>
+                    <input type="text" id="customerAddress" placeholder="المدينة، المحافظة، أو تفاصيل العنوان">
+                </div>
+            </div>
+
             <button class="checkout-whatsapp" onclick="checkoutWhatsApp()">
                 <i class="fa-brands fa-whatsapp" style="font-size: 1.4rem;"></i> إرسال الطلب عبر واتساب
             </button>
@@ -413,7 +451,6 @@
                 </div>
                 <button class="admin-btn" onclick="changeAdminPassword()">حفظ كلمة المرور في Google Sheets</button>
 
-                <!-- هنا تم تحديث زر إغلاق لوحة التحكم -->
                 <button class="close-cart" onclick="closeAdminModal()" style="margin-top: 2rem;">إغلاق لوحة التحكم</button>
             </div>
         </div>
@@ -555,7 +592,6 @@
             document.getElementById('adminModal').style.display = 'flex'; 
         }
 
-        // 🛑 التعديل هنا: عند إغلاق لوحة التحكم يتم تسجيل الخروج ومسح كلمة المرور 🛑
         function closeAdminModal() { 
             document.getElementById('adminModal').style.display = 'none'; 
             document.getElementById('adminDashboardSection').style.display = 'none';
@@ -648,17 +684,38 @@
             alert('تم تحديث كلمة المرور في Google Sheets بنجاح!');
         }
 
+        // دالة إرسال الطلب عبر الواتساب متضمنة اسم وعنوان العميل
         function checkoutWhatsApp() {
-            if (cart.length === 0) return alert('السلة فارغة.');
-            let message = "السلام عليكم، أرغب في طلب المنتجات التالية من العوادلي للعسل:\n\n";
+            if (cart.length === 0) {
+                alert('السلة فارغة، برجاء إضافة منتجات أولاً.');
+                return;
+            }
+
+            let name = document.getElementById('customerName').value.trim();
+            let address = document.getElementById('customerAddress').value.trim();
+
+            if (!name || !address) {
+                alert('الرجاء إدخال (الاسم) و (العنوان بالتفصيل) قبل إرسال الطلب.');
+                return;
+            }
+
+            let message = `🛒 *طلب جديد من متجر العوادلي للعسل*\n\n`;
+            message += `👤 *اسم العميل:* ${name}\n`;
+            message += `📍 *العنوان:* ${address}\n\n`;
+            message += `🛍️ *المنتجات المطلوبة:*\n`;
+            
             let totalPrice = 0;
             cart.forEach(item => {
                 let itemTotal = item.price * item.quantity;
                 totalPrice += itemTotal;
                 message += `🔹 ${item.name} (عدد: ${item.quantity}) - ${itemTotal} جنيه\n`;
             });
-            message += `\n💰 الإجمالي الكلي: ${totalPrice} جنيه\n\nالعنوان: دنجواي - أول طريق الشط.`;
-            window.open(`https://wa.me/201515382820?text=${encodeURIComponent(message)}`, '_blank');
+
+            message += `\n💰 *الإجمالي الكلي:* ${totalPrice} جنيه`;
+
+            let phone = "201515382820";
+            let url = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
+            window.open(url, '_blank');
         }
 
         window.onload = fetchDatabase;
